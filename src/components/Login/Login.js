@@ -11,10 +11,21 @@ const Login = (props) => {
     const [passwordIsValid, setPasswordIsValid] = useState();
     const [formIsValid, setFormIsValid] = useState(false);
 
+    /**
+     * for first time clean up function not run
+     * from the time clean up function run first then execute other code inside of useEffect function
+     * Here clean up function working with principal of clouser.
+     */
     useEffect(() => {
-        setFormIsValid(
-            enteredEmail.includes("@") && enteredPassword.trim().length > 6
-        );
+        const indentifier = setTimeout(() => {
+            setFormIsValid(
+                enteredEmail.includes("@") && enteredPassword.trim().length > 6
+            );
+        }, 1000);
+
+        return () => {
+            clearTimeout(indentifier);
+        };
     }, [enteredEmail, enteredPassword]);
 
     const emailChangeHandler = (event) => {
