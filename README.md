@@ -43,3 +43,15 @@ function App() {
 
 }
 ```
+
+#### use dependency
+
+In components/Login/login.js
+
+```js
+useEffect(() => {
+    setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+    );
+}, [enteredEmail, enteredPassword]);
+```
