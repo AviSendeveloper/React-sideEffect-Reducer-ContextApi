@@ -82,3 +82,34 @@ useEffect(() => {
 Here clean up function form a clouser, but how it's working? \
 When first time useEffect run, in **indentifier** constant setTimeout id is save. Now in next time when useEffect re-executing, clean up function run first and from clouser's lexical environment (which is created in first time) it takes **indentifier**'s id and destroy them and then execute **identifier** and create new **indentifier** id and it repeating.\
 **In this way only for last key stock setTimeout will be there and and only for the one time setFormIsValid() will be executed.**
+
+---
+
+## Reducer
+
+```js
+const [state, dispatcher] = useReducer(reduceFn, initialState, initFn);
+```
+
+**Example**
+
+```js
+const emailReducer = (state, action) => {
+    if (action.type === "ENTERED_EMAIL") {
+        return { val: action.val, isValid: action.val.includes("@") };
+    }
+    if (action.type === "CHECK_EMAIL") {
+        return { val: state.val, isValid: state.val.includes("@") };
+    }
+    return { val: "", isValid: false };
+};
+
+// reducer format
+const [emailState, dispatchEmail] = useReducer(emailReducer, {
+    val: "",
+    isValid: false,
+});
+
+// change state using dispatch
+dispatchEmail({ type: "ENTERED_EMAIL", val: event.target.value });
+```
