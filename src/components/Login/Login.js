@@ -27,23 +27,6 @@ const passwordReducer = (state, action) => {
 const Login = (props) => {
     const [formIsValid, setFormIsValid] = useState(false);
 
-    /**
-     * for first time clean up function not run
-     * from the time clean up function run first then execute other code inside of useEffect function
-     * Here clean up function working with principal of clouser.
-     */
-    // useEffect(() => {
-    //     const indentifier = setTimeout(() => {
-    //         setFormIsValid(
-    //             enteredEmail.includes("@") && enteredPassword.trim().length > 6
-    //         );
-    //     }, 1000);
-
-    //     return () => {
-    //         clearTimeout(indentifier);
-    //     };
-    // }, [enteredEmail, enteredPassword]);
-
     // reducer for email
     const [emailState, dispatchEmail] = useReducer(emailReducer, {
         val: "",
@@ -56,17 +39,28 @@ const Login = (props) => {
         isValid: false,
     });
 
+    /**
+     * for first time clean up function not run
+     * from the time clean up function run first then execute other code inside of useEffect function
+     * Here clean up function working with principal of clouser.
+     */
+    useEffect(() => {
+        const indentifier = setTimeout(() => {
+            setFormIsValid(emailState.isValid && passwordState.isValid);
+        }, 1000);
+        console.log("useEffect");
+
+        return () => {
+            clearTimeout(indentifier);
+        };
+    }, [emailState.isValid, passwordState.isValid]);
+
     const emailChangeHandler = (event) => {
         dispatchEmail({ type: "ENTERED_EMAIL", val: event.target.value });
-
-        setFormIsValid(emailState.isValid && passwordState.isValid);
     };
 
     const passwordChangeHandler = (event) => {
-        // setEnteredPassword(event.target.value);
         dispatchPassword({ type: "ENTERED_PASSWORD", val: event.target.value });
-
-        setFormIsValid(emailState.isValid && passwordState.isValid);
     };
 
     const validateEmailHandler = () => {
